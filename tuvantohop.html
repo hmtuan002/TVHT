@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Tư vấn chọn tổ hợp theo năng lực học tập</title>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+        .DiemTHCS, .DiemTHCS2 {
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #ffffff;
+            color: #333;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+        }
+        .DiemTHCS table, .DiemTHCS2 table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .DiemTHCS th, .DiemTHCS td {
+            padding: 8px 5px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        .display-box {
+            font-family: 'Orbitron', sans-serif; /* Giữ font gốc nếu có */
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            color: #495057;
+            border-radius: 4px;
+            width: 100%;
+            height: 35px;
+            text-align: center;
+            box-sizing: border-box;
+            padding: 0 5px;
+        }
+        .display-title {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #87CEFA;
+            border: 1px solid #ced4da;
+            color: #333;
+            border-radius: 4px;
+            width: 100%;
+            height: 35px;
+            text-align: left;
+            padding-left: 5px;
+            box-sizing: border-box;
+            font-weight: bold;
+        }
+        .display-title2 {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #87CEFA;
+            border: 1px solid #ced4da;
+            color: #333;
+            border-radius: 4px;
+            width: 100%;
+            height: 35px;
+            text-align: center;
+            box-sizing: border-box;
+            font-weight: bold;
+        }
+        .button {
+            font-family: sans-serif;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            width: 100%;
+            border-radius: 4px;
+            height: 40px;
+            outline: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .button:active {
+            background: #004085;
+            box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Tùy chỉnh input file mặc định */
+        #excelFile {
+            display: none;
+        }
+
+        /* Tùy chỉnh nhãn thành nút */
+        label[for="excelFile"] {
+            display: inline-block;
+            background-color: #6c757d;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+
+        label[for="excelFile"]:hover {
+            background-color: #5a6268;
+        }
+
+        #fileName {
+            font-style: italic;
+            color: #666;
+            margin-left: 5px;
+        }
+        .button-download {
+            background-color: #28a745;
+        }
+        .button-download:hover {
+            background-color: #218838;
+        }
+        .button-clear {
+            background-color: #dc3545;
+        }
+        .button-clear:hover {
+            background-color: #c82333;
+        }
+        .result-box {
+            width: 100%;
+            height: 80px !important; /* Tăng chiều cao để hiển thị đủ thông tin */
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            word-break: break-word;
+            background-color: #e2e6ea;
+            border: 1px solid #dae0e5;
+            color: #1a1a1a;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="DiemTHCS">
+            <table>
+                <tr>
+                    <td><input class="display-title" type="text" value="" disabled /></td>
+                    <td><input class="display-title2" type="text" value="Lớp 6" disabled /></td>
+                    <td><input class="display-title2" type="text" value="Lớp 7" disabled /></td>
+                    <td><input class="display-title2" type="text" value="Lớp 8" disabled /></td>
+                    <td><input class="display-title2" type="text" value="Lớp 9" disabled /></td>
+                </tr>
+                <tr>
+                    <td><input class="display-title" type="text" value="Toán" disabled /></td>
+                    <td><input class="display-box" type="text" id="toan6" value="" /></td>
+                    <td><input class="display-box" type="text" id="toan7" value="" /></td>
+                    <td><input class="display-box" type="text" id="toan8" value="" /></td>
+                    <td><input class="display-box" type="text" id="toan9" value="" /></td>
+                </tr>
+                <tr>
+                    <td><input class="display-title" type="text" value="Vật lý" disabled /></td>
+                    <td><input class="display-box" type="text" id="ly6" value="" /></td>
+                    <td><input class="display-box" type="text" id="ly7" value="" /></td>
+                    <td><input class="display-box" type="text" id="ly8" value="" /></td>
+                    <td><input class="display-box" type="text" id="ly9" value="" /></td>
+                </tr>
+                <tr>
+                    <td><input class="display-title" type="text" value="Hóa học" disabled /></td>
+                    <td><input class="display-box" type="text" id="hoa6" value="" /></td>
+                    <td><input class="display-box" type="text" id="hoa7" value="" /></td>
+                    <td><input class="display-box" type="text" id="hoa8" value="" /></td>
+                    <td><input class="display-box" type="text" id="hoa9" value="" /></td>
+                </tr>
+                <tr>
+                    <td><input class="display-title" type="text" value="Sinh học" disabled /></td>
+                    <td><input class="display-box" type="text" id="sinh6" value="" /></td>
+                    <td><input class="display-box" type="text" id="sinh7" value="" /></td>
+                    <td><input class="display-box" type="text" id="sinh8" value="" /></td>
+                    <td><input class="display-box" type="text" id="sinh9" value="" /></td>
+                </tr>
+                <tr>
+                    <td><input class="display-title" type="text" value="Ngữ văn" disabled /></td>
+                    <td><input class="display-box" type="text" id="van6" value="" /></td>
+                    <td><input class="display-box" type="text" id="van7" value="" /></td>
+                    <td><input class="display-box" type="text" id="van8" value="" /></td>
+                    <td><input class="display-box" type="text" id="van9" value="" /></td>
+                </tr>
+                <tr>
+                    <td><input class="display-title" type="text" value="Lịch sử" disabled /></td>
+                    <td><input class="display-box" type="text" id="su6" value="" /></td>
+                    <td><input class="display-box" type="text" id="su7" value="" /></td>
+                    <td><input class="display-box" type="text" id="su8" value="" /></td>
+                    <td><input class="display-box" type="text" id="su9" value="" /></td>
+                </tr>
+                <tr>
+                    <td><input class="display-title" type="text" value="Địa lý" disabled /></td>
+                    <td><input class="display-box" type="text" id="dia6" value="" /></td>
+                    <td><input class="display-box" type="text" id="dia7" value="" /></td>
+                    <td><input class="display-box" type="text" id="dia8" value="" /></td>
+                    <td><input class="display-box" type="text" id="dia9" value="" /></td>
+                </tr>
+                <tr>
+                    <td><input class="display-title" type="text" value="Tiếng anh" disabled /></td>
+                    <td><input class="display-box" type="text" id="anh6" value="" /></td>
+                    <td><input class="display-box" type="text" id="anh7" value="" /></td>
+                    <td><input class="display-box" type="text" id="anh8" value="" /></td>
+                    <td><input class="display-box" type="text" id="anh9" value="" /></td>
+                </tr>
+                <tr>
+                    <td><input class="display-title" type="text" value="Công nghệ" disabled /></td>
+                    <td><input class="display-box" type="text" id="cn6" value="" /></td>
+                    <td><input class="display-box" type="text" id="cn7" value="" /></td>
+                    <td><input class="display-box" type="text" id="cn8" value="" /></td>
+                    <td><input class="display-box" type="text" id="cn9" value="" /></td>
+                </tr>
+                <tr>
+                    <td><input class="display-title" type="text" value="Tin học" disabled /></td>
+                    <td><input class="display-box" type="text" id="th6" value="" /></td>
+                    <td><input class="display-box" type="text" id="th7" value="" /></td>
+                    <td><input class="display-box" type="text" id="th8" value="" /></td>
+                    <td><input class="display-box" type="text" id="th9" value="" /></td>
+                </tr>
+                <tr>
+                    <td><input class="display-title" type="text" value="GDCD" disabled /></td>
+                    <td><input class="display-box" type="text" id="gdcd6" value="" /></td>
+                    <td><input class="display-box" type="text" id="gdcd7" value="" /></td>
+                    <td><input class="display-box" type="text" id="gdcd8" value="" /></td>
+                    <td><input class="display-box" type="text" id="gdcd9" value="" /></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="DiemTHCS2">
+            <table>
+                <tr>
+                    <td colspan="2">
+                        <label for="excelFile">📁 File điểm</label>
+                        <span id="fileName">Chưa chọn file nào</span>
+                    </td>
+                    <td><input class="button" type="button" id="mau2" value="Đọc dữ liệu từ file"/></td>
+                </tr>
+                <tr>
+                    <td><input class="button" type="button" id="tuvan" value="Tư vấn chọn tổ hợp"/></td>
+                    <td><input class="button button-clear" type="button" id="xoa" value="Xóa"/></td>
+                    <td>
+                        <a href="https://docs.google.com/spreadsheets/d/12LE1T-fZDEmBTrQCzmQNjRHgfTy9X5Cy/edit?usp=sharing&ouid=113662691499014817150&rtpof=true&sd=true" download>
+                            <input class="button button-download" type="button" value="Download file mẫu"/>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <input class="display-box result-box" type="text" id="kqtuvan" value="" disabled />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    <input type="file" id="excelFile" accept=".xls,.xlsx"/>
+
+    <script>
+        let selectedFile;
+
+        // Xử lý khi chọn file Excel
+        document.getElementById('excelFile').addEventListener('change', function (e) {
+            selectedFile = e.target.files[0];
+            document.getElementById('fileName').textContent = selectedFile ? selectedFile.name : "Chưa chọn file nào";
+        });
+
+        // Xử lý khi nhấn nút "Đọc dữ liệu từ file"
+        document.getElementById('mau2').addEventListener('click', function () {
+            if (!selectedFile) {
+                alert("Vui lòng chọn một file Excel trước.");
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+                if (jsonData.length === 0) {
+                    alert("File Excel không có dữ liệu hoặc không đúng định dạng.");
+                    return;
+                }
+
+                // Giả sử chỉ đọc dòng đầu tiên
+                const row = jsonData[0];
+
+                document.getElementById("toan6").value = row["Toan6"] || "";
+                document.getElementById("toan7").value = row["Toan7"] || "";
+                document.getElementById("toan8").value = row["Toan8"] || "";
+                document.getElementById("toan9").value = row["Toan9"] || "";
+                
+                document.getElementById("ly6").value = row["Ly6"] || "";
+                document.getElementById("ly7").value = row["Ly7"] || "";
+                document.getElementById("ly8").value = row["Ly8"] || "";
+                document.getElementById("ly9").value = row["Ly9"] || "";
+                
+                document.getElementById("hoa6").value = row["Hoa6"] || "";
+                document.getElementById("hoa7").value = row["Hoa7"] || "";
+                document.getElementById("hoa8").value = row["Hoa8"] || "";
+                document.getElementById("hoa9").value = row["Hoa9"] || "";
+                
+                document.getElementById("sinh6").value = row["Sinh6"] || "";
+                document.getElementById("sinh7").value = row["Sinh7"] || "";
+                document.getElementById("sinh8").value = row["Sinh8"] || "";
+                document.getElementById("sinh9").value = row["Sinh9"] || "";
+                
+                document.getElementById("van6").value = row["Van6"] || "";
+                document.getElementById("van7").value = row["Van7"] || "";
+                document.getElementById("van8").value = row["Van8"] || "";
+                document.getElementById("van9").value = row["Van9"] || "";
+                
+                document.getElementById("su6").value = row["Su6"] || "";
+                document.getElementById("su7").value = row["Su7"] || "";
+                document.getElementById("su8").value = row["Su8"] || "";
+                document.getElementById("su9").value = row["Su9"] || "";
+                
+                document.getElementById("dia6").value = row["Dia6"] || "";
+                document.getElementById("dia7").value = row["Dia7"] || "";
+                document.getElementById("dia8").value = row["Dia8"] || "";
+                document.getElementById("dia9").value = row["Dia9"] || "";
+                
+                document.getElementById("anh6").value = row["Anh6"] || "";
+                document.getElementById("anh7").value = row["Anh7"] || "";
+                document.getElementById("anh8").value = row["Anh8"] || "";
+                document.getElementById("anh9").value = row["Anh9"] || "";
+                
+                document.getElementById("cn6").value = row["CongNghe6"] || "";
+                document.getElementById("cn7").value = row["CongNghe7"] || "";
+                document.getElementById("cn8").value = row["CongNghe8"] || "";
+                document.getElementById("cn9").value = row["CongNghe9"] || "";
+                
+                document.getElementById("th6").value = row["Tin6"] || "";
+                document.getElementById("th7").value = row["Tin7"] || "";
+                document.getElementById("th8").value = row["Tin8"] || "";
+                document.getElementById("th9").value = row["Tin9"] || "";
+                
+                document.getElementById("gdcd6").value = row["GDCD6"] || "";
+                document.getElementById("gdcd7").value = row["GDCD7"] || "";
+                document.getElementById("gdcd8").value = row["GDCD8"] || "";
+                document.getElementById("gdcd9").value = row["GDCD9"] || "";
+
+                alert("Dữ liệu đã được đọc thành công!");
+            };
+            reader.readAsArrayBuffer(selectedFile);
+        });
+
+        // Xử lý khi nhấn nút "Tư vấn chọn tổ hợp"
+        document.getElementById("tuvan").onclick = function() {
+            let toan6 = parseFloat(document.getElementById('toan6').value) || 0;
+            let toan7 = parseFloat(document.getElementById('toan7').value) || 0;
+            let toan8 = parseFloat(document.getElementById('toan8').value) || 0;
+            let toan9 = parseFloat(document.getElementById('toan9').value) || 0;
+            
+            let ly6 = parseFloat(document.getElementById('ly6').value) || 0;
+            let ly7 = parseFloat(document.getElementById('ly7').value) || 0;
+            let ly8 = parseFloat(document.getElementById('ly8').value) || 0;
+            let ly9 = parseFloat(document.getElementById('ly9').value) || 0;
+            
+            let hoa6 = parseFloat(document.getElementById('hoa6').value) || 0;
+            let hoa7 = parseFloat(document.getElementById('hoa7').value) || 0;
+            let hoa8 = parseFloat(document.getElementById('hoa8').value) || 0;
+            let hoa9 = parseFloat(document.getElementById('hoa9').value) || 0;
+            
+            let sinh6 = parseFloat(document.getElementById('sinh6').value) || 0;
+            let sinh7 = parseFloat(document.getElementById('sinh7').value) || 0;
+            let sinh8 = parseFloat(document.getElementById('sinh8').value) || 0;
+            let sinh9 = parseFloat(document.getElementById('sinh9').value) || 0;
+            
+            let van6 = parseFloat(document.getElementById('van6').value) || 0;
+            let van7 = parseFloat(document.getElementById('van7').value) || 0;
+            let van8 = parseFloat(document.getElementById('van8').value) || 0;
+            let van9 = parseFloat(document.getElementById('van9').value) || 0;
+            
+            let su6 = parseFloat(document.getElementById('su6').value) || 0;
+            let su7 = parseFloat(document.getElementById('su7').value) || 0;
+            let su8 = parseFloat(document.getElementById('su8').value) || 0;
+            let su9 = parseFloat(document.getElementById('su9').value) || 0;
+            
+            let dia6 = parseFloat(document.getElementById('dia6').value) || 0;
+            let dia7 = parseFloat(document.getElementById('dia7').value) || 0;
+            let dia8 = parseFloat(document.getElementById('dia8').value) || 0;
+            let dia9 = parseFloat(document.getElementById('dia9').value) || 0;
+            
+            let anh6 = parseFloat(document.getElementById('anh6').value) || 0;
+            let anh7 = parseFloat(document.getElementById('anh7').value) || 0;
+            let anh8 = parseFloat(document.getElementById('anh8').value) || 0;
+            let anh9 = parseFloat(document.getElementById('anh9').value) || 0;
+            
+            let congnghe6 = parseFloat(document.getElementById('cn6').value) || 0;
+            let congnghe7 = parseFloat(document.getElementById('cn7').value) || 0;
+            let congnghe8 = parseFloat(document.getElementById('cn8').value) || 0;
+            let congnghe9 = parseFloat(document.getElementById('cn9').value) || 0;
+            
+            let tin6 = parseFloat(document.getElementById('th6').value) || 0;
+            let tin7 = parseFloat(document.getElementById('th7').value) || 0;
+            let tin8 = parseFloat(document.getElementById('th8').value) || 0;
+            let tin9 = parseFloat(document.getElementById('th9').value) || 0;
+            
+            let gdcd6 = parseFloat(document.getElementById('gdcd6').value) || 0;
+            let gdcd7 = parseFloat(document.getElementById('gdcd7').value) || 0;
+            let gdcd8 = parseFloat(document.getElementById('gdcd8').value) || 0;
+            let gdcd9 = parseFloat(document.getElementById('gdcd9').value) || 0;
+
+            // Tính điểm trung bình môn học theo các lớp
+            // Khởi tạo mảng tb với 12 phần tử, trong đó tb[0] không được sử dụng
+            let tb = Array(12).fill(0); 
+
+            // Kiểm tra và tính toán điểm trung bình, đảm bảo không chia cho 0
+            const calculateAverage = (scores) => {
+                const validScores = scores.filter(s => s > 0);
+                return validScores.length > 0 ? validScores.reduce((sum, s) => sum + s, 0) / validScores.length : 0;
+            };
+
+            tb[1] = calculateAverage([toan6, toan7, toan8, toan9]);
+            tb[2] = calculateAverage([ly6, ly7, ly8, ly9]);
+            tb[3] = calculateAverage([hoa6, hoa7, hoa8, hoa9]); // Hóa học có thể chỉ có từ lớp 8, 9
+            tb[4] = calculateAverage([sinh6, sinh7, sinh8, sinh9]);
+            tb[5] = calculateAverage([van6, van7, van8, van9]);
+            tb[6] = calculateAverage([su6, su7, su8, su9]);
+            tb[7] = calculateAverage([dia6, dia7, dia8, dia9]);
+            tb[8] = calculateAverage([anh6, anh7, anh8, anh9]);
+            tb[9] = calculateAverage([congnghe6, congnghe7, congnghe8, congnghe9]);
+            tb[10] = calculateAverage([tin6, tin7, tin8, tin9]);
+            tb[11] = calculateAverage([gdcd6, gdcd7, gdcd8, gdcd9]);
+
+            // Thiết lập các trọng số từ kết quả của mô hình hồi quy trong Python
+            let w = [
+                [], // Không dùng w[0] để đồng bộ với tb[0]
+                [2.223185816179204, 0.14902505384891845, 0.16800644188557098, 0.19192804784325435, 0.15221415523950269, -0.032279956155250124, 0.02284974886976372, -0.01742621168321047, -0.03978880617023168, 0.1855003689759866, -0.041468059331952536, -0.012144999455584558], // Tổ hợp 1
+                [0.6081664117935688, 0.2115246423397202, 0.18932763599586075, 0.1921052268113936, 0.013685991879425376, -0.009154132012748456, -0.011726520907072855, 0.2003408155138076, 0.007476677858621069, -0.01973259930382655, 0.1660393593018661, 0.01048724025232588], // Tổ hợp 2
+                [-0.23827470340054724, 0.1816572890275869, -0.003595426372345498, 0.19686507506835926, 0.20308936358558738, 0.0026608344283898613, 0.01417096697699189, 0.02434345058359031, 0.007758464401748996, 0.01849948791714937, 0.2116327879477152, 0.20256331702885128], // Tổ hợp 3
+                [-0.1666531592856062, 0.010163905823121986, 0.26213566253022047, 0.0023410419911386463, -0.005264802925800215, 0.2669652084492935, -0.0029022453823482116, 0.2615798581200615, 0.0084699585952016, 0.002696800106461503, -0.006586663758444402, 0.25013852496298167], // Tổ hợp 4
+                [0.22326995679661543, 0.19712303972692674, -0.01003121405800367, 0.21531885478698704, 0.012349309000980439, 0.189077099635485, 0.0179116098305149, -0.006167298952645859, -0.0073009856206986655, -0.02807232535979967, 0.21852515154811053, 0.1962059273300595], // Tổ hợp 5
+                [-0.519853029294314, 0.00588911357511758, 0.018474117277890056, -0.003663262302902415, 0.26014811747505273, 0.2624151098295252, 0.013158044493785916, 0.26614040099764336, 0.015882486175086436, 0.25899856981513825, -0.025848744563634805, 0.022577313132557852]  // Tổ hợp 6
+            ];
+
+            // Tính điểm dự đoán theo các tổ hợp
+            let dudoan = Array(6).fill(0); // 6 tổ hợp từ 0 đến 5
+
+            for (let i = 0; i < 6; i++) { // 6 tổ hợp
+                // w[i+1][0] là hệ số tự do (intercept)
+                dudoan[i] = w[i + 1][0]; 
+                for (let j = 1; j <= 11; j++) { // 11 môn học
+                    dudoan[i] += w[i + 1][j] * tb[j]; 
+                }
+            }
+
+            // Tìm tổ hợp ưu tiên 1 và 2
+            let uutien = []; // Lưu trữ cặp [điểm, chỉ số tổ hợp]
+            for (let i = 0; i < 6; i++) {
+                uutien.push({ score: dudoan[i], index: i + 1 }); // Lưu chỉ số tổ hợp từ 1-6
+            }
+
+            // Sắp xếp giảm dần theo điểm
+            uutien.sort((a, b) => b.score - a.score);
+
+            let resultText = "Bạn nên chọn tổ hợp: ";
+            resultText += `Ưu tiên 1 là tổ hợp ${uutien[0].index}`;
+            if (uutien.length > 1) {
+                resultText += `, ưu tiên 2 là tổ hợp ${uutien[1].index}`;
+            }
+
+            document.getElementById("kqtuvan").value = resultText;
+        };
+
+        // Xử lý khi nhấn nút "Xóa"
+        document.getElementById("xoa").onclick = function() {
+            const inputElements = document.querySelectorAll('.display-box');
+            inputElements.forEach(input => {
+                input.value = "";
+            });
+            document.getElementById("kqtuvan").value = "";
+            document.getElementById("fileName").textContent = "Chưa chọn file nào";
+            selectedFile = null; // Đặt lại file đã chọn
+        };
+    </script>
+</body>
+</html>
