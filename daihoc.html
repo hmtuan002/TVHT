@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TLC-g1 | Chatbot AI Đại Học</title>
+    <title>DH | Chatbot AI Tư Vấn Đại Học</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -233,7 +233,7 @@
         <div class="flex-1 flex flex-col h-full overflow-hidden">
 
             <header class="p-4 border-b border-gray-700 bg-dark-bg">
-                <h1 class="text-xl font-semibold text-left">TLC-g1 | Chatbot AI Đại Học</h1>
+                <h1 class="text-xl font-semibold text-left">DH | Chatbot AI Tư Vấn Đại Học</h1>
             </header>
             
 
@@ -778,7 +778,7 @@ if (greetings.some(greet => userMessage.toLowerCase().includes(greet))) {
 
 
         function loadChats() {
-            const storedChats = localStorage.getItem('tlc-g1-chats');
+            const storedChats = localStorage.getItem('DH-chats');
             if (storedChats) {
                 const now = Date.now();
                 const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
@@ -802,7 +802,7 @@ if (greetings.some(greet => userMessage.toLowerCase().includes(greet))) {
                 return now - chatTime < THIRTY_DAYS;
             });
 
-            localStorage.setItem('tlc-g1-chats', JSON.stringify(chats));
+            localStorage.setItem('DH-chats', JSON.stringify(chats));
         }
 
 
