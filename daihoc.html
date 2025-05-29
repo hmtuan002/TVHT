@@ -443,7 +443,7 @@ function setupEventListeners() {
     addMessageToUI("user", userMessage);
     const greetings = ["chào", "hello"];
 if (greetings.some(greet => userMessage.toLowerCase().includes(greet))) {
-    const greetingResponse = "Xin chào, tôi là AI Đại Học được tạo ra bởi Hoàng Minh Tuấn và Trương Viết Duy Chương đến từ trường THPT Thừa Lưu. Tôi có thể giúp gì cho bạn về Đại Học ngay bây giờ?";
+    const greetingResponse = "Xin chào, tôi là AI Đại Học được tạo ra bởi Lê Nguyễn Ngọc Thiệu đến từ trường THPT Số II Mộ Đức. Tôi có thể giúp gì cho bạn về Đại Học ngay bây giờ?";
     displayTypingMessage(greetingResponse, () => {
         if (!isStopped) {
             currentChat.messages.push({ 
