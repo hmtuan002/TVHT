@@ -95,13 +95,9 @@
             background: #004085;
             box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
         }
-
-        /* Tùy chỉnh input file mặc định */
         #excelFile {
             display: none;
         }
-
-        /* Tùy chỉnh nhãn thành nút */
         label[for="excelFile"] {
             display: inline-block;
             background-color: #6c757d;
@@ -113,11 +109,9 @@
             font-size: 14px;
             transition: background-color 0.2s ease;
         }
-
         label[for="excelFile"]:hover {
             background-color: #5a6268;
         }
-
         #fileName {
             font-style: italic;
             color: #666;
@@ -154,7 +148,6 @@
             white-space: pre-line;
             word-wrap: break-word;
         }
-        /* Tùy chỉnh thanh cuộn */
         .result-container::-webkit-scrollbar {
             width: 8px;
         }
@@ -316,7 +309,6 @@
                     return;
                 }
 
-                // Giả sử chỉ đọc dòng đầu tiên
                 const row = jsonData[0];
 
                 document.getElementById("van6").value = row["Van6"] || "";
@@ -374,9 +366,8 @@
             reader.readAsArrayBuffer(selectedFile);
         });
 
-        // Xử lý khi nhấn nút "Tư vấn chọn tổ hợp"
         document.getElementById("tuvan").onclick = function() {
-            // Lấy điểm các môn học
+          
             let van6 = parseFloat(document.getElementById('van6').value) || 0;
             let van7 = parseFloat(document.getElementById('van7').value) || 0;
             let van8 = parseFloat(document.getElementById('van8').value) || 0;
@@ -427,7 +418,6 @@
             let hoatdong8 = parseFloat(document.getElementById('hoatdong8').value) || 0;
             let hoatdong9 = parseFloat(document.getElementById('hoatdong9').value) || 0;
 
-            // Tính điểm trung bình môn học theo các lớp
             const calculateAverage = (scores) => {
                 const validScores = scores.filter(s => s > 0);
                 return validScores.length > 0 ? validScores.reduce((sum, s) => sum + s, 0) / validScores.length : 0;
@@ -444,12 +434,103 @@
             let tbNgheThuat = calculateAverage([nghethuat6, nghethuat7, nghethuat8, nghethuat9]);
             let tbHoatDong = calculateAverage([hoatdong6, hoatdong7, hoatdong8, hoatdong9]);
 
-            // Định nghĩa các tổ hợp môn phổ biến
+            let allSubjects = [
+                van6, van7, van8, van9,
+                toan6, toan7, toan8, toan9,
+                anh6, anh7, anh8, anh9,
+                gdcd6, gdcd7, gdcd8, gdcd9,
+                lsdl6, lsdl7, lsdl8, lsdl9,
+                khtn6, khtn7, khtn8, khtn9,
+                cn6, cn7, cn8, cn9,
+                th6, th7, th8, th9,
+                nghethuat6, nghethuat7, nghethuat8, nghethuat9,
+                hoatdong6, hoatdong7, hoatdong8, hoatdong9
+            ];
+            let tbAll = calculateAverage(allSubjects);
+
+            if (tbAll < 6.5) {
+               
+                let subjectsScores = [
+                    { name: "Toán", score: tbToan },
+                    { name: "Ngữ văn", score: tbVan },
+                    { name: "Ngoại ngữ", score: tbAnh },
+                    { name: "Khoa học tự nhiên", score: tbKHTN },
+                    { name: "Lịch sử - Địa lý", score: tbLSDL },
+                    { name: "Công nghệ", score: tbCN },
+                    { name: "Tin học", score: tbTH },
+                    { name: "Nghệ thuật", score: tbNgheThuat },
+                    { name: "Giáo dục công dân", score: tbGDCD },
+                    { name: "Hoạt động trải nghiệm", score: tbHoatDong }
+                ];
+                subjectsScores.sort((a, b) => b.score - a.score);
+
+                let topSubject = subjectsScores[0];
+                let secondSubject = subjectsScores[1];
+                let recommendedVocations = [];
+
+                if (topSubject.score < 5.0) {
+                    recommendedVocations.push("Hiện tại điểm số các môn đều thấp, bạn nên tập trung cải thiện học lực trước khi chọn nghề.");
+                } else {
+                    switch(topSubject.name) {
+                        case "Toán":
+                        case "Khoa học tự nhiên":
+                            recommendedVocations.push("Kỹ thuật điện", "Cơ khí chế tạo", "Kỹ thuật cơ điện tử");
+                            if (secondSubject.name === "Công nghệ" && secondSubject.score >= 6.0) {
+                                recommendedVocations.push("Kỹ thuật xây dựng");
+                            }
+                            break;
+                        case "Công nghệ":
+                            recommendedVocations.push("Kỹ thuật xây dựng", "Cơ khí chế tạo", "May thời trang");
+                            break;
+                        case "Tin học":
+                            recommendedVocations.push("Lập trình viên", "Sửa chữa máy tính", "Thiết kế đồ họa");
+                            break;
+                        case "Ngữ văn":
+                        case "Giáo dục công dân":
+                            recommendedVocations.push("Hướng dẫn viên du lịch", "Quản lý khách sạn", "Marketing");
+                            break;
+                        case "Ngoại ngữ":
+                            recommendedVocations.push("Hướng dẫn viên du lịch quốc tế", "Biên phiên dịch", "Nhân viên lễ tân");
+                            break;
+                        case "Nghệ thuật":
+                            recommendedVocations.push("Thiết kế thời trang", "Nhiếp ảnh", "Trang điểm nghệ thuật");
+                            break;
+                        case "Lịch sử - Địa lý":
+                            recommendedVocations.push("Hướng dẫn viên du lịch", "Quản lý môi trường", "Khai thác tài nguyên");
+                            break;
+                        case "Hoạt động trải nghiệm":
+                            recommendedVocations.push("Tổ chức sự kiện", "Hướng dẫn viên du lịch", "Chăm sóc khách hàng");
+                            break;
+                    }
+                }
+
+                let resultText = "════════ TƯ VẤN HƯỚNG NGHIỆP ════════\n\n";
+                resultText += `📉 Điểm trung bình tất cả các môn: ${tbAll.toFixed(2)} (dưới 6.5)\n\n`;
+                resultText += "🏭 GỢI Ý HỌC NGHỀ:\n";
+                resultText += `Dựa trên năng lực của bạn, bạn nên cân nhắc học các nghề sau:\n`;
+                recommendedVocations.forEach(vocation => {
+                    resultText += `🔹 ${vocation}\n`;
+                });
+                resultText += "\n📊 ĐIỂM TRUNG BÌNH CÁC MÔN:\n";
+                resultText += `- Ngữ văn: ${tbVan.toFixed(2)}\n`;
+                resultText += `- Toán: ${tbToan.toFixed(2)}\n`;
+                resultText += `- Ngoại ngữ: ${tbAnh.toFixed(2)}\n`;
+                resultText += `- Khoa học tự nhiên: ${tbKHTN.toFixed(2)}\n`;
+                resultText += `- Lịch sử - Địa lý: ${tbLSDL.toFixed(2)}\n`;
+                resultText += `- Công nghệ: ${tbCN.toFixed(2)}\n`;
+                resultText += `- Tin học: ${tbTH.toFixed(2)}\n`;
+                resultText += `- Nghệ thuật: ${tbNgheThuat.toFixed(2)}\n\n`;
+                resultText += "💡 LỜI KHUYÊN: Điểm số hiện tại cho thấy bạn phù hợp với các chương trình đào tạo nghề. Hãy chọn nghề phù hợp với sở thích và năng lực, đồng thời tiếp tục cải thiện các môn học để có thêm cơ hội. Liên hệ với trung tâm hướng nghiệp để biết thêm chi tiết.";
+
+                document.getElementById("kqtuvan").textContent = resultText;
+                return;
+            }
+
             const toHop = [
                 {
                     name: "Khoa học tự nhiên (Toán, Lý, Hóa, Sinh)",
                     subjects: ["Toán", "KHTN"],
-                    weights: [0.4, 0.6] // Trọng số cho Toán và KHTN
+                    weights: [0.4, 0.6]
                 },
                 {
                     name: "Khoa học xã hội (Văn, Sử, Địa, GDCD)",
@@ -473,7 +554,6 @@
                 }
             ];
 
-            // Tính điểm cho từng tổ hợp
             let diemToHop = toHop.map(comb => {
                 let diem = 0;
                 comb.subjects.forEach((subject, index) => {
@@ -496,11 +576,9 @@
                 };
             });
 
-            // Sắp xếp các tổ hợp theo điểm giảm dần
             diemToHop.sort((a, b) => b.diem - a.diem);
-
-            // Tạo kết quả tư vấn chi tiết
             let resultText = "════════ TƯ VẤN TỔ HỢP MÔN HỌC ════════\n\n";
+            resultText += `📊 Điểm trung bình tất cả các môn: ${tbAll.toFixed(2)}\n\n`;
             resultText += "🏆 TỔ HỢP PHÙ HỢP NHẤT:\n";
             resultText += `🔹 ${diemToHop[0].name}\n`;
             resultText += `   Điểm đánh giá: ${diemToHop[0].diem.toFixed(2)}\n\n`;
