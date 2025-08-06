@@ -504,43 +504,8 @@
                     subjects: ["Văn", "LSDL"],
                     weights: [0.5, 0.5],
                     check: () => tbVan >= 6.5 && tbLSDL >= 6.5
-                },
-                {
-                    name: "C01 (Ngữ văn, Toán, Vật lý)",
-                    subjects: ["Văn", "Toán", "KHTN"],
-                    weights: [0.4, 0.3, 0.3],
-                    check: () => tbVan >= 6.5 && tbToan >= 6.5 && tbKHTN >= 6.5
-                },
-                {
-                    name: "D09 (Toán, Lịch sử, Tiếng Anh)",
-                    subjects: ["Toán", "LSDL", "Anh"],
-                    weights: [0.4, 0.3, 0.3],
-                    check: () => tbToan >= 6.5 && tbLSDL >= 6.5 && tbAnh >= 6.5
-                },
-                {
-                    name: "D14 (Ngữ văn, Lịch sử, Tiếng Anh)",
-                    subjects: ["Văn", "LSDL", "Anh"],
-                    weights: [0.4, 0.3, 0.3],
-                    check: () => tbVan >= 6.5 && tbLSDL >= 6.5 && tbAnh >= 6.5
-                },
-                {
-                    name: "A10 (Toán, Vật lý, Giáo dục công dân)",
-                    subjects: ["Toán", "KHTN", "GDCD"],
-                    weights: [0.4, 0.3, 0.3],
-                    check: () => tbToan >= 6.5 && tbKHTN >= 6.5 && tbGDCD >= 6.5
-                },
-                {
-                    name: "D66 (Ngữ văn, Giáo dục công dân, Tiếng Anh)",
-                    subjects: ["Văn", "GDCD", "Anh"],
-                    weights: [0.4, 0.3, 0.3],
-                    check: () => tbVan >= 6.5 && tbGDCD >= 6.5 && tbAnh >= 6.5
-                },
-                {
-                    name: "K00 (Toán, Công nghệ, Tin học)",
-                    subjects: ["Toán", "CN", "TH"],
-                    weights: [0.4, 0.3, 0.3],
-                    check: () => tbToan >= 6.5 && tbCN >= 6.5 && tbTH >= 6.5
                 }
+                
             ];
             let diemToHop = toHop
                 .filter(comb => comb.check())
