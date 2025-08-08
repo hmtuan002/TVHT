@@ -438,7 +438,7 @@
                             }
                             break;
                         case "Công nghệ":
-                            recommendedVocations.push("May công nghiệp", "Cơ khí lắp ráp", "Xây dựng dân dụng");
+                            recommendedVocations.push("May công nghiệp", "Cơ khí lắp ráp", "Hàn cơ khí");
                             break;
                         case "Tin học":
                             recommendedVocations.push("Sửa chữa thiết bị điện tử", "Lắp ráp máy tính", "Cài đặt phần mềm cơ bản");
@@ -448,7 +448,7 @@
                             recommendedVocations.push("Nhân viên dịch vụ khách hàng", "Thư ký văn phòng", "Hỗ trợ hành chính");
                             break;
                         case "Ngoại ngữ":
-                            recommendedVocations.push("Nhân viên lễ tân", "Hỗ trợ du lịch cơ bản", "Nhân viên bán hàng quốc tế");
+                            recommendedVocations.push("Nhân viên lễ tân", "Hỗ trợ du lịch cơ bản", "Nhân viên bán hàng");
                             break;
                         case "Lịch sử - Địa lý":
                             recommendedVocations.push("Hỗ trợ du lịch địa phương", "Nhân viên bảo vệ môi trường", "Công nhân nông nghiệp");
@@ -551,7 +551,8 @@
                 resultText += `- Lịch sử - Địa lý: ${tbLSDL.toFixed(2)}\n`;
                 resultText += `- Công nghệ: ${tbCN.toFixed(2)}\n`;
                 resultText += `- Tin học: ${tbTH.toFixed(2)}\n\n`;
-                resultText += "💡 GỢI Ý: Bạn nên ưu tiên chọn tổ hợp có điểm cao nhất phù hợp với năng lực và sở thích của mình. Nếu có thắc mắc, hãy trao đổi thêm với giáo viên chủ nhiệm hoặc chuyên viên hướng nghiệp.";
+                resultText += "💡 GỢI Ý: Bạn nên ưu tiên chọn tổ hợp có điểm cao nhất phù hợp với năng lực và sở thích của mình. Nếu có thắc mắc, hãy trao đổi thêm với giáo viên chủ nhiệm hoặc chuyên viên hướng nghiệp.\n";
+                 resultText += "CHÚ Ý: Các môn được đề xuất tổ hợp trên là các môn ở chương trình cấp 3.";
             }
             document.getElementById("kqtuvan").textContent = resultText;
         };
